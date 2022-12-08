@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="./styles/index.css" />
+  </head>
+  <body>
+    <div id="app">
+      <main class="main">
+        <form id="product_form" method="POST" @submit="formSubmit">
+          <div class="nav">
+            <h3>Product Add</h3>
+            <div class="actions">
+              <!-- <input type="submit" value="SAVE" class="save"/> -->
+              <button type="submit" class="btn">SAVE</button>
+              <a href="index.html" class="btn">CANCEL</a>
+            </div>
+          </div>
+          <div class="message">
+            <h3>{{msg}}</h3>
+          </div>
+          <div class="p-flex">
+            <div class="p-main">
+              <div class="p-input">
+                <label for="sku">SKU:</label>
+                <input
+                  id="sku"
+                  type="text"
+                  placeholder="SKU"
+                  v-model="sku"
+                  required
+                />
+              </div>
+              <div class="p-input">
+                <label for="name">Name:</label>
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="Name"
+                  v-model="name"
+                  required
+                />
+              </div>
+              <div class="p-input">
+                <label for="price">Price :</label>
+                <input
+                  id="price"
+                  type="text"
+                  name="Price"
+                  placeholder="$"
+                  v-model="price"
+                  required
+                />
+              </div>
+            </div>
+            <div class="p-main">
+              <div class="p-input">
+                <label for="cars">Product Type:</label>
+                <select
+                  name="productType"
+                  id="productType"
+                  placeholder="Type Switcher"
+                  v-model="type"
+                  required
+                >
+                  <option id="DVD" value="DVD">DVD</option>
+                  <option id="Book" value="Book">Book</option>
+                  <option id="Furniture" value="Furniture">Furniture</option>
+                </select>
+              </div>
+              <div v-if="type == 'DVD'" class="type-options">
+                <h3>Please, provide size</h3>
+                <div class="p-input">
+                  <label for="size">Size (MB) </label>
+                  <input
+                    id="size"
+                    type="text"
+                    placeholder="Size"
+                    v-model="size"
+                    required
+                  />
+                </div>
+              </div>
+              <div v-else-if="type == 'Book'" class="type-options">
+                <h3>Please, provide weight</h3>
+                <div class="p-input">
+                  <label for="weight"> Weight (KG)</label>
+                  <input
+                    id="weight"
+                    type="text"
+                    placeholder=""
+                    v-model="weight"
+                    required
+                  />
+                </div>
+              </div>
+              <div v-else-if="type == 'Furniture'" class="type-options">
+                <h3>Please, provide dimensions</h3>
+                <div class="p-input">
+                  <label for="height"> Height (CM)</label>
+                  <input
+                    id="height"
+                    type="text"
+                    placeholder="Height"
+                    v-model="height"
+                    required
+                  />
+                </div>
+                <div class="p-input">
+                  <label for="width"> Width (CM)</label>
+                  <input
+                    id="width"
+                    type="text"
+                    placeholder="Width"
+                    v-model="width"
+                    required
+                  />
+                </div>
+                <div class="p-input" class="type-options">
+                  <label for="length"> Length (CM)</label>
+                  <input
+                    id="length"
+                    type="text"
+                    placeholder="Length"
+                    v-model="length"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>
+<script>
+  const { createApp } = Vue;
+  createApp({
+    data() {
+      return {
+        sku: "",
+        name: "",
+        price: "",
+        type: "",
+        size: "",
+        weight: "",
+        height: "",
+        length: "",
+        width: "",
+        msg: "",
+      };
+    },
+    watch: {
+      type: function () {
+        //do something when the data changes.
+        this.size = "";
+        this.weight = "";
+        this.height = "";
+        this.length = "";
+        this.width = "";
+      },
+      price: function () {
+        this.price = this.validateNumber(this.price);
+      },
+      size: function () {
+        this.size = this.validateNumber(this.size);
+      },
+      weight: function () {
+        this.weight = this.validateNumber(this.weight);
+      },
+      length: function () {
+        this.length = this.validateNumber(this.length);
+      },
+      heigh: function () {
+        this.heigh = this.validateNumber(this.heigh);
+      },
+      width: function () {
+        this.width = this.validateNumber(this.width);
+      },
+    },
+    methods: {
+      validateNumber(input) {
+        return input > 0 ? input : "";
+      },
+      async formSubmit(e) {
+        e.preventDefault();
+        let response = await axios
+          .post("actions.php", {
+            action: "add",
+            sku: this.sku,
+            name: this.name,
+            price: this.price,
+            type: this.type,
+            size: this.size,
+            weight: this.weight,
+            height: this.height,
+            length: this.length,
+            width: this.width,
+          })
+          .then(function (response) {
+            // this.msg = response.data
+            // console.log(this.msg);
+            return response.data;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        if (response == " success") {
+          window.location.href = "/";
+        } else {
+          console.log(response)
+          this.msg = response;
+        }
+      },
+    },
+  }).mount("#app");
+</script>

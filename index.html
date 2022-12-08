@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="./styles/index.css" />
+  </head>
+  <body>
+    <div id="app">
+        <!-- navigation -->
+
+        <div class="nav">
+          <h3>Product-list</h3>
+          <div class="actions">
+            <a href="index.html" @click="massDelete" class="btn">MASS DELETE</a>
+            <a href="add-product.html" class="btn">ADD</a>
+          </div>
+        </div>
+        <!-- products -->
+        <div class="products">
+          <div class="product" v-for="product in products" :key="product.id">
+           <input
+              type="checkbox"
+              class="delete-checkbox"
+              :value="product.id"
+            />
+            <h3>{{product.sku}}</h3>
+            <h2>{{product.name}}</h2>
+            <h3>{{product.price}}</h3>
+            <h3>{{product.type}}</h3>
+            <div v-if="product.type == 'Furniture'">
+              <p>Dimensions: {{product.height}} x {{product.length}} x {{product.width}}</p>
+            </div>
+            <div v-else-if="product.type == 'DVD'">
+              <p>Size: {{product.size}} MB</p>
+            </div>
+            <div v-else-if="product.type == 'Book'">
+              <p>weight: {{product.weight}} KG</p>
+            </div>
+          </div>
+          </div>
+          
+        </div>
+    </div>
+  </body>
+
+
+
+
+
+
+  <script>
+    const { ref, createApp, onMounted } = Vue;
+    createApp({
+      setup() {
+
+        const products = ref([{}]);
+
+        const checked = ref([]);
+        onMounted(() => {
+          fetchPosts();
+        });
+        const fetchPosts = () => {
+          axios
+            .post("actions.php", {
+              action: "getProducts",
+            })
+            .then(function (response) {
+              products.value = response.data;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+        // const addToDelete = (id) => {
+        //   const index = checked.value.indexOf(id);
+        //   index > -1 ? checked.value.splice(index, 1) : checked.value.push(id);
+        //   console.log(checked.value);
+        // };
+        const massDelete = (e) => {
+          e.preventDefault();
+          checkForAutomation();
+          axios
+            .post("actions.php", {
+              action: "deleteProducts",
+              ids: checked.value,
+            })
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+            fetchPosts()
+        };
+        const checkForAutomation = () => {
+          checkboxes = document.getElementsByClassName("delete-checkbox");
+          for (i = 0; i < checkboxes.length; i++) {
+            if(checkboxes[i].checked){
+              checked.value.push(checkboxes[i].value)
+            }
+          }
+        };
+        return {
+          products,
+          massDelete,
+          // addToDelete,
+        };
+      },
+    }).mount("#app");
+  </script>
+</html>
