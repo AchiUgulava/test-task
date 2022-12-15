@@ -16,14 +16,25 @@
       <div class="nav">
         <h3>Product list</h3>
         <div class="actions">
-          <a href="index.html" @click="massDelete" class="btn" :style="{ backgroundColor: randomColor() }">MASS DELETE</a>
+          <a
+            href="index.html"
+            @click="massDelete"
+            class="btn"
+            :style="{ backgroundColor: randomColor() }"
+            >MASS DELETE</a
+          >
           <a href="add-product.html" class="btn">ADD</a>
         </div>
       </div>
       <!-- products -->
       <div class="products">
-        <div class="product" v-for="product in products" :key="product.id" :style="{ backgroundColor: randomColor() }">
-          <input type="checkbox" class="delete-checkbox" :value="product.id" />
+        <div
+          class="product"
+          v-for="product in products"
+          :key="product.id"
+          :style="{ backgroundColor: randomColor() }"
+        >
+          <input type="checkbox" class="delete-checkbox" :value="product.sku" />
           <h3>{{product.sku}}</h3>
           <h2>{{product.name}}</h2>
           <h3>{{product.price}}</h3>
@@ -57,9 +68,7 @@
         });
         const fetchPosts = () => {
           axios
-            .post("actions.php", {
-              action: "getProducts",
-            })
+            .post("back/crud/read.php")
             .then(function (response) {
               products.value = response.data;
             })
@@ -67,18 +76,13 @@
               console.log(error);
             });
         };
-        // const addToDelete = (id) => {
-        //   const index = checked.value.indexOf(id);
-        //   index > -1 ? checked.value.splice(index, 1) : checked.value.push(id);
-        //   console.log(checked.value);
-        // };
         const massDelete = (e) => {
           e.preventDefault();
           checkForAutomation();
           axios
-            .post("actions.php", {
+            .post("back/crud/delete.php", {
               action: "deleteProducts",
-              ids: checked.value,
+              skus: checked.value,
             })
             .then(function (response) {
               console.log(response);
@@ -97,7 +101,17 @@
           }
         };
         const randomColor = () => {
-          let arr = ['#fa5f49','#a6fab6','#f9d99a','#84b6f4','#fcb7af','#ff9688','#8cfca4','#fdfd96','#a788ab'];
+          let arr = [
+            "#fa5f49",
+            "#a6fab6",
+            "#f9d99a",
+            "#84b6f4",
+            "#fcb7af",
+            "#ff9688",
+            "#8cfca4",
+            "#fdfd96",
+            "#a788ab",
+          ];
           let randIndex = Math.floor(Math.random() * arr.length);
           return arr[randIndex];
         };
@@ -106,7 +120,6 @@
           products,
           massDelete,
           randomColor,
-          // addToDelete,
         };
       },
     }).mount("#app");
