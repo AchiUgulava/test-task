@@ -1,7 +1,7 @@
 
 <h3 align="center">test task</h3>
 
-<h3 align="center">had to use vue cdn because there is no ssh access on hosting website, so code is a bit all over the place. I used PDO for mysql communication, hope that's not a problem.</h3>
+<h3 align="center">had to use vue cdn because there is no ssh access on hosting website, so code is a bit all over the place. I used PDO for mysql communication, OOP classes for Product and Database and procedural for crud requests.</h3>
 
 </p>
 
