@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Products</title>
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="./styles/index.css" />
@@ -68,8 +68,9 @@
         });
         const fetchPosts = () => {
           axios
-            .post("back/crud/read.php")
+            .post("backend/crud/read.php")
             .then(function (response) {
+              console.log(response.data)
               products.value = response.data;
             })
             .catch(function (error) {
@@ -80,12 +81,12 @@
           e.preventDefault();
           checkForAutomation();
           axios
-            .post("back/crud/delete.php", {
+            .post("backend/crud/delete.php", {
               action: "deleteProducts",
               skus: checked.value,
             })
             .then(function (response) {
-              console.log(response);
+              console.log(response.data);
             })
             .catch(function (error) {
               console.log(error);
@@ -97,6 +98,7 @@
           for (i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
               checked.value.push(checkboxes[i].value);
+              checkboxes[i].checked=false;
             }
           }
         };
