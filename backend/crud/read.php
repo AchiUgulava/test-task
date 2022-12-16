@@ -11,6 +11,5 @@ $db = new DB();
 // Get all products from database
 $result = $db->readAll();
 // Return result as JSON
-// header('Content-Type: application/json');
 echo json_encode($result);
 return;

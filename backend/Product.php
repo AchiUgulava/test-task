@@ -60,11 +60,18 @@ abstract class Product
         return array_merge($base, $params);
     }
     //methods for create
+    // get query nescecary for type table
     abstract public function getCreateQuery();
+    //params for type table
     abstract public function getCreateParams();
     //methods for read
+    //get query for reading type table
     abstract public function getReadQuery();
+    //params for query
+    //turned out not to be nescecary
     abstract public function getReadParams();
+    //set params in inherited classes
     abstract public function setAllParams($params);
+    //get params from type classes as an array
     abstract public function getAllParams();
 }

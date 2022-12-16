@@ -10,9 +10,6 @@ class Furniture extends Product
     public function __construct($sku, $name, $price)
     {
         parent::__construct($sku, $name, $price, 'Furniture');
-        // $this-> height= $height;
-        // $this-> length= $length;
-        // $this-> width= $width;
     }
 
     public function getHeight()

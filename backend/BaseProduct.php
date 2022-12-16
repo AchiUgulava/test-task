@@ -25,7 +25,7 @@ class BaseProduct extends Product
     }
     public function getCreateQuery()
     {
-        return 'INSERT INTO books (sku, weight) VALUES (?, ?)';
+        return;
     }
     public function getCreateParams()
     {

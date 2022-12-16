@@ -33,6 +33,7 @@ class DB
     public function addProduct(Product $product)
     {
         try {
+            //prepare and execute query on main table
             $query = 'INSERT INTO products (sku, name, price, type) VALUES (?, ?, ?, ?)';
             $params = [$product->getSku(), $product->getName(), $product->getPrice(), $product->getType()];
             $this->pdo->prepare($query)->execute($params);
@@ -46,13 +47,18 @@ class DB
     }
     public function readProductParams(Product $product)
     {
+        // recieve product
         if ($product) {
-                $query = $product->getReadQuery();
-                $params = $product->getSku();
-                $result = $this->pdo->prepare($query);
-                $result->execute([$params]);
-                $type_params = $result->fetch(PDO::FETCH_ASSOC);
-                $product->setAllParams($type_params);
+            //get product params query and params
+            $query = $product->getReadQuery();
+            $params = $product->getSku();
+            //retrieve data
+            $result = $this->pdo->prepare($query);
+            $result->execute([$params]);
+            $type_params = $result->fetch(PDO::FETCH_ASSOC);
+            //set all params in type
+            $product->setAllParams($type_params);
+            //retrieve all data as an array
             $data = $product->getAll();
             return $data;
         }
@@ -60,41 +66,18 @@ class DB
     }
     public function readAll()
     {
+        // retrieve all product bases
         $query = 'SELECT * FROM products';
         $result = $this->pdo->query($query);
         $products = $result->fetchAll(PDO::FETCH_ASSOC);
         $data = [];
         // Loop through each product
         foreach ($products as $product) {
-            $base = new BaseProduct($product['sku'],$product['name'], $product['price'], $product['type']);
+            $base = new BaseProduct($product['sku'], $product['name'], $product['price'], $product['type']);
+            // initialise product bases
             $product = $base->initByType();
+            //use read product method to retrieve all data of a product
             $product_data = $this->readProductParams($product);
-            // Get additional information for furniture, book or dvd
-            // if ($product['type'] === 'Book') {
-            //     $query = 'SELECT weight FROM books WHERE sku = ?';
-            //     $params = [$product['sku']];
-            //     $result = $this->pdo->prepare($query);
-            //     $result->execute($params);
-            //     $book = $result->fetch(PDO::FETCH_ASSOC);
-            //     $product['weight'] = $book['weight'];
-            // } else if ($product['type'] === 'DVD') {
-            //     $query = 'SELECT size FROM dvds WHERE sku = ?';
-            //     $params = [$product['sku']];
-            //     $result = $this->pdo->prepare($query);
-            //     $result->execute($params);
-            //     $dvd = $result->fetch(PDO::FETCH_ASSOC);
-            //     $product['size'] = $dvd['size'];
-            // } else if ($product['type'] === 'Furniture') {
-            //     $query = 'SELECT height, width, length FROM furnitures WHERE sku = ?';
-            //     $params = [$product['sku']];
-            //     $result = $this->pdo->prepare($query);
-            //     $result->execute($params);
-            //     $furniture = $result->fetch(PDO::FETCH_ASSOC);
-            //     $product['height'] = $furniture['height'];
-            //     $product['width'] = $furniture['width'];
-            //     $product['length'] = $furniture['length'];
-            // }
-            // Add product to result array
             array_push($data, $product_data);
         }
         return $data;
