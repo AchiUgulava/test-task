@@ -54,4 +54,17 @@ abstract class Product
     {
         $this->type = $type;
     }
+    public function getall(){
+        $base = array('sku' => $this->getSku(),'name' => $this->getName(),'price' =>$this->getPrice(),'type' => $this->getType());
+        $params = $this->getAllParams();
+        return array_merge($base, $params);
+    }
+    //methods for create
+    abstract public function getCreateQuery();
+    abstract public function getCreateParams();
+    //methods for read
+    abstract public function getReadQuery();
+    abstract public function getReadParams();
+    abstract public function setAllParams($params);
+    abstract public function getAllParams();
 }

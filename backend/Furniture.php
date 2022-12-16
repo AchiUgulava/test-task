@@ -7,12 +7,12 @@ class Furniture extends Product
     protected $length;
     protected $width;
 
-    public function __construct($sku, $name, $price, $height,$width,$length)
+    public function __construct($sku, $name, $price)
     {
         parent::__construct($sku, $name, $price, 'Furniture');
-        $this-> height= $height;
-        $this-> length= $length;
-        $this-> width= $width;
+        // $this-> height= $height;
+        // $this-> length= $length;
+        // $this-> width= $width;
     }
 
     public function getHeight()
@@ -22,7 +22,7 @@ class Furniture extends Product
 
     public function setHeight($height)
     {
-        $this-> height= $height;
+        $this->height = $height;
     }
     public function getWidth()
     {
@@ -31,7 +31,7 @@ class Furniture extends Product
 
     public function setWidth($width)
     {
-        $this-> width= $width;
+        $this->width = $width;
     }
     public function getLength()
     {
@@ -40,7 +40,36 @@ class Furniture extends Product
 
     public function setLength($length)
     {
-        $this-> length= $length;
+        $this->length = $length;
+    }
+
+    public function getCreateQuery()
+    {
+        return 'INSERT INTO furnitures (sku, height, length, width) VALUES (?, ?, ?, ?)';
+    }
+    public function getCreateParams()
+    {
+        return [$this->getSku(), $this->getHeight(), $this->getLength(), $this->getWidth()];
+    }
+
+
+    public function getReadQuery()
+    {
+        return 'SELECT height, width, length FROM furnitures WHERE sku = ?';
+    }
+    public function getReadParams()
+    {
+        return;
+    }
+    public function setAllParams($params)
+    {
+        $this->setHeight($params['height']);
+        $this->setWidth($params['width']);
+        $this->setLength($params['length']);
+    }
+    public function getAllParams()
+    {
+        return array('height' => $this->getHeight(),'width' => $this->getWidth(),'length' =>$this->getLength());
     }
 
 }
