@@ -2,7 +2,7 @@
 
 include('config.php');
 
-class DB
+abstract class DB
 {
 
     //props

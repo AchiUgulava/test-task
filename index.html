@@ -68,7 +68,7 @@
         });
         const fetchPosts = () => {
           axios
-            .post("backend/crud/read.php")
+            .post("back/crud/read.php")
             .then(function (response) {
               console.log(response.data)
               products.value = response.data;
@@ -81,7 +81,7 @@
           e.preventDefault();
           checkForAutomation();
           axios
-            .post("backend/crud/delete.php", {
+            .post("back/crud/delete.php", {
               action: "deleteProducts",
               skus: checked.value,
             })

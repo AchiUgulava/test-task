@@ -191,7 +191,7 @@
       async formSubmit(e) {
         e.preventDefault();
         let response = await axios
-          .post("backend/crud/create.php", {
+          .post("back/crud/create.php", {
             action: "add",
             sku: this.sku,
             name: this.name,
